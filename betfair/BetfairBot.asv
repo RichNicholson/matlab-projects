@@ -1,0 +1,17 @@
+function BetfairBot(username, password, applicationKey)
+
+token = BetfairLogin(username, password, applicationKey);
+keepAliveStatus = BetfairKeepAlive(applicationKey, token);
+
+% GB football matches
+jsonBody = '{"filter" : {"eventTypeIds": [1], "marketCountries": ["GB"]}}';
+listEvents = BetfairPost('listEvents/', jsonBody, applicationKey, token);
+
+for i = 1:numel(listEvents)
+    jsonBody = ['{"filter" : {"eventTypeIds": [' listEvents{i}.event.id '], "marketCountries": ["GB"]}, "maxResults":100}'];
+    jsonBody = '{"filter" : {"eventTypeIds": [1], "marketCountries": ["GB"]}, "maxResults":100}';
+    listMarketCat = BetfairPost('listMarketCatalogue/', jsonBody, applicationKey, token);
+end
+
+
+
